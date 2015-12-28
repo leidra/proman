@@ -1,5 +1,6 @@
 package net.leidra.pm.ui;
 
+import com.google.common.eventbus.EventBus;
 import net.leidra.pm.core.CoreConfiguration;
 import net.leidra.pm.core.ServicesConfiguration;
 import net.leidra.pm.core.entities.Product;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {CoreConfiguration.class, ServicesConfiguration.class, SecurityConfiguration.class})
@@ -28,4 +30,8 @@ public class PromanApplication implements CommandLineRunner {
         productRepository.save(p);
     }
 
+    @Bean
+    public EventBus createEventBus() {
+        return new EventBus();
+    }
 }

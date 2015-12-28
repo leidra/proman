@@ -21,9 +21,10 @@ import org.vaadin.spring.security.util.SecurityExceptionUtils;
 @Theme(MainUI.THEME_NAME)
 public class MainUI extends UI {
     public final static String THEME_NAME = "mytheme";
+    private CssLayout contentContainer;
+
     @Autowired
     private SpringViewProvider viewProvider;
-    private CssLayout contentContainer;
 
     @Override
     protected void init(VaadinRequest request) {

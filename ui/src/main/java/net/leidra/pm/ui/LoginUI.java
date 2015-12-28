@@ -21,9 +21,7 @@ public class LoginUI extends UI {
     private VaadinSecurity vaadinSecurity;
 
     private TextField userName;
-
     private PasswordField passwordField;
-
     private Button login;
 
     private Label loginFailedLabel;

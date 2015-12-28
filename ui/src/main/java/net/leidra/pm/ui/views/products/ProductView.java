@@ -2,11 +2,11 @@ package net.leidra.pm.ui.views.products;
 
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import net.leidra.pm.ui.views.AbstractView;
+import net.leidra.pm.ui.views.Presenter.Presenter;
 import net.leidra.pm.ui.views.products.ProductPresenter.ProductPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Created by afuentes on 14/12/15.
@@ -14,13 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringView(name = ProductView.VIEW_NAME)
 public class ProductView extends AbstractView {
     public final static String VIEW_NAME = "Product";
-
-    @Autowired
-    protected ProductPresenter presenter;
-
-    private Button newButton = new Button("New", e -> this.showEditor());
-    private Button editButton = new Button("Edit", e -> this.edit());
-    private Button listButton = new Button("List", e -> this.showList());
 
     @Autowired
     public void setEditor(ProductEditor editor) {
@@ -33,31 +26,18 @@ public class ProductView extends AbstractView {
     }
 
     @Override
-    protected Component createComponentMenu() {
-        editButton.setVisible(false);
-
-        CssLayout layout = new CssLayout();
-        layout.addComponent(newButton);
-        layout.addComponent(editButton);
-        layout.addComponent(listButton);
-
-        return layout;
+    @Autowired
+    @Qualifier(ProductPresenter.PRESENTER_NAME)
+    protected void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
     public Button getNewButton() {
         return newButton;
     }
 
-    public Button getEditButton() {
-        return editButton;
-    }
-
     public Button getListButton() {
         return listButton;
     }
 
-    @Override
-    protected ProductPresenter getPresenter() {
-        return presenter;
-    }
 }
