@@ -1,0 +1,18 @@
+@import "../valo/valo.scss";
+
+@import "layout/header.scss";
+@import "layout/view-container.scss";
+@import "layout/footer.scss";
+
+@mixin mytheme {
+	@include valo;
+
+	.ui-container {
+		width: 100%;
+		height: 100%;
+
+		@include header;
+		@include view-container;
+		@include footer;
+	}
+}

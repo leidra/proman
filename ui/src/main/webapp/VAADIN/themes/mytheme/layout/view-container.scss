@@ -1,0 +1,12 @@
+@import "menu.scss";
+@import "content.scss";
+
+@mixin view-container {
+	.view-container {
+		width: 100%;
+		height: 80%;
+
+		@include menu-container;
+		@include content-container;
+	}
+}
