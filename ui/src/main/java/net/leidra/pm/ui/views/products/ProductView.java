@@ -4,7 +4,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import net.leidra.pm.ui.views.AbstractView;
 import net.leidra.pm.ui.views.Presenter.Presenter;
-import net.leidra.pm.ui.views.products.ProductPresenter.ProductPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

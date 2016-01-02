@@ -9,19 +9,9 @@ import javax.persistence.Id;
  * Created by afuentes on 14/12/15.
  */
 @Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Product extends AbstractEntity {
     private String name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String brand;
 
     public String getName() {
         return name;
@@ -29,5 +19,13 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

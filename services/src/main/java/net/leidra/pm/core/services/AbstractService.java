@@ -3,7 +3,9 @@ package net.leidra.pm.core.services;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import net.leidra.pm.core.repositories.GenericRepository;
+import net.leidra.pm.shared.dtos.AbstractDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
@@ -14,10 +16,10 @@ import java.util.Set;
 /**
  * Created by afuentes on 14/12/15.
  */
-public abstract class AbstractService<ENTITY, DTO> {
+public abstract class AbstractService<ENTITY, DTO extends AbstractDto> implements Service<DTO> {
     @Autowired
     protected GenericRepository<ENTITY> repository;
-    protected static MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    protected static final MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     private Class<ENTITY> entityClass;
     private Class<DTO> dtoClass;
@@ -25,14 +27,6 @@ public abstract class AbstractService<ENTITY, DTO> {
     @PostConstruct
     public void postConstruct() {
         configureMapper();
-    }
-
-    protected void configureMapper() {
-        Type[] actualTypeArguments = ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments();
-        entityClass = (Class)actualTypeArguments[0];
-        dtoClass = (Class)actualTypeArguments[1];
-
-        getMapperFactory().classMap(entityClass, dtoClass);
     }
 
     public DTO findOne(Long id) {
@@ -47,8 +41,33 @@ public abstract class AbstractService<ENTITY, DTO> {
         return convertToDtos(entities);
     }
 
+    public DTO save(DTO dto) {
+        Assert.notNull(dto);
+        ENTITY entity = saveTransactional(dto);
+        return convertToDto(entity);
+    }
+
+    public void remove(DTO dto) {
+        Assert.notNull(dto);
+        this.remove(dto.getId());
+    }
+
+    public void remove(Long id) {
+        repository.delete(id);
+    }
+
+    protected abstract ENTITY saveTransactional(DTO dto);
+
     protected DTO convertToDto(ENTITY entity) {
         return getMapperFactory().getMapperFacade().map(entity, dtoClass);
+    }
+
+    protected void configureMapper() {
+        Type[] actualTypeArguments = ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments();
+        entityClass = (Class)actualTypeArguments[0];
+        dtoClass = (Class)actualTypeArguments[1];
+
+        getMapperFactory().classMap(entityClass, dtoClass);
     }
 
     protected Set<DTO> convertToDtos(List<ENTITY> entity) {

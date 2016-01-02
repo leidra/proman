@@ -1,12 +1,13 @@
 package net.leidra.pm.ui.views.products;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.TextField;
-import net.leidra.pm.core.entities.ProductDto;
-import net.leidra.pm.ui.views.EditorViewComponent;
+import net.leidra.pm.shared.dtos.ProductDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 
@@ -15,30 +16,34 @@ import org.springframework.context.annotation.Scope;
  */
 @SpringComponent
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class ProductEditor extends AbstractProductViewComponent implements EditorViewComponent<ProductDto> {
-    TextField name;
-
-    private ProductDto bean;
-    private BeanFieldGroup<ProductDto> fieldGroup = new BeanFieldGroup<>(ProductDto.class);
+public class ProductEditor extends AbstractEditorComponent<ProductDto> {
+    private TextField name;
 
     @Override
     protected CssLayout buildView() {
+        fieldGroup = new BeanFieldGroup<>(ProductDto.class);
+
         name = new TextField("Name");
         name.setNullRepresentation("");
 
         CssLayout editorLayout = new CssLayout();
         editorLayout.addComponent(name);
-        editorLayout.addComponent(new Button("Save", e -> presenter.save(bean, fieldGroup)));
+        editorLayout.addComponent(new Button("Save", this::saveAction));
 
         return editorLayout;
     }
 
-    @Override
-    public void setDatasource(ProductDto dto) {
-        this.bean = dto;
+    @Autowired
+    public void setPresenter(ProductPresenter presenter) {
+        this.presenter = presenter;
+    }
 
-        fieldGroup.setItemDataSource(bean);
-        fieldGroup.bindMemberFields(this);
-        fieldGroup.setBuffered(true);
+    protected void saveAction(Button.ClickEvent e) {
+        try {
+            bean = presenter.save(bean, fieldGroup);
+        } catch (FieldGroup.CommitException e1) {
+            e1.printStackTrace();
+        }
+        presenter.showList();
     }
 }

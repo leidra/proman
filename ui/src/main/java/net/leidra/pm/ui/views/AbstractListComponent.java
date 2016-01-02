@@ -1,22 +1,21 @@
 package net.leidra.pm.ui.views;
 
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
-import net.leidra.pm.ui.views.products.AbstractProductViewComponent;
+import net.leidra.pm.shared.dtos.AbstractDto;
+import net.leidra.pm.ui.views.products.AbstractViewComponent;
 
 /**
  * Created by afuentes on 28/12/15.
  */
-public abstract class AbstractListComponent<BEAN> extends AbstractProductViewComponent implements ListViewComponent<BEAN> {
+public abstract class AbstractListComponent<BEAN extends AbstractDto> extends AbstractViewComponent<BEAN> implements ListViewComponent<BEAN> {
     protected Grid grid = new Grid();
-    protected BEAN value;
 
     public void refresh() {
-        grid.setContainerDataSource(createDatasource());
+        grid.setContainerDataSource(presenter.createDatasource());
     }
 
     @Override
@@ -38,21 +37,21 @@ public abstract class AbstractListComponent<BEAN> extends AbstractProductViewCom
     public Component getDetails(Grid.RowReference rowReference) {
         CssLayout layout = new CssLayout();
 
-        layout.addComponent(new Button("Edit", e -> this.editClickListener(rowReference)));
+        layout.addComponent(new Button("Edit", e -> this.editAction(rowReference)));
+        layout.addComponent(new Button("Remove", e -> this.removeAction(rowReference)));
         return layout;
     }
 
     public BEAN getValue() {
-        return value;
+        return bean;
     }
 
     protected void rowSelected(SelectionEvent e) {
-        grid.setDetailsVisible(this.value, false);
-        this.value = (BEAN) grid.getSelectedRow();
-        grid.setDetailsVisible(this.value, true);
+        grid.setDetailsVisible(this.bean, false);
+        this.bean = (BEAN) grid.getSelectedRow();
+        grid.setDetailsVisible(this.bean, true);
     }
 
-    protected abstract BeanItemContainer createDatasource();
-
-    protected abstract void editClickListener(Grid.RowReference rowReference);
+    protected abstract void editAction(Grid.RowReference rowReference);
+    protected abstract void removeAction(Grid.RowReference rowReference);
 }

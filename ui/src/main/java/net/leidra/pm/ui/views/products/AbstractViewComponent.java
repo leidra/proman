@@ -2,18 +2,16 @@ package net.leidra.pm.ui.views.products;
 
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.VerticalLayout;
-import net.leidra.pm.ui.views.products.ProductPresenter.ProductPresenter;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.leidra.pm.shared.dtos.AbstractDto;
 
 import javax.annotation.PostConstruct;
 
 /**
  * Created by afuentes on 27/12/15.
  */
-public abstract class AbstractProductViewComponent extends CustomComponent {
-    @Autowired
-    protected ProductPresenter presenter;
+public abstract class AbstractViewComponent<BEAN extends AbstractDto> extends CustomComponent {
+    protected BEAN bean;
+    protected AbstractPresenter<BEAN> presenter;
 
     @PostConstruct
     public void postConstruct() {
