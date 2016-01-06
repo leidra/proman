@@ -7,8 +7,12 @@ import java.util.Set;
  */
 public interface Service<DTO> {
     DTO findOne(Long id);
+
     Set<DTO> findAll();
+
     void remove(DTO dto);
+
     void remove(Long id);
+
     DTO save(DTO dto);
 }

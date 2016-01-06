@@ -3,7 +3,7 @@ package net.leidra.pm.core.services;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import net.leidra.pm.core.repositories.GenericRepository;
-import net.leidra.pm.shared.dtos.AbstractDto;
+import net.leidra.pm.shared.pojos.AbstractPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
@@ -16,10 +16,11 @@ import java.util.Set;
 /**
  * Created by afuentes on 14/12/15.
  */
-public abstract class AbstractService<ENTITY, DTO extends AbstractDto> implements Service<DTO> {
+public abstract class AbstractService<ENTITY, DTO extends AbstractPojo> implements Service<DTO> {
     @Autowired
     protected GenericRepository<ENTITY> repository;
-    protected static final MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    protected static final MapperFactory mapperFactory = new DefaultMapperFactory
+            .Builder().useBuiltinConverters(true).build();
 
     private Class<ENTITY> entityClass;
     private Class<DTO> dtoClass;
@@ -63,9 +64,9 @@ public abstract class AbstractService<ENTITY, DTO extends AbstractDto> implement
     }
 
     protected void configureMapper() {
-        Type[] actualTypeArguments = ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments();
-        entityClass = (Class)actualTypeArguments[0];
-        dtoClass = (Class)actualTypeArguments[1];
+        Type[] actualTypeArguments = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
+        entityClass = (Class) actualTypeArguments[0];
+        dtoClass = (Class) actualTypeArguments[1];
 
         getMapperFactory().classMap(entityClass, dtoClass);
     }

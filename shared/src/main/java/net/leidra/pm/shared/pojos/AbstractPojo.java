@@ -1,4 +1,4 @@
-package net.leidra.pm.core.entities;
+package net.leidra.pm.shared.pojos;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -7,11 +7,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by afuentes on 28/12/15.
- */
 @MappedSuperclass
-public class AbstractEntity extends AbstractPersistable<Long> {
+public class AbstractPojo extends AbstractPersistable<Long> implements Pojo {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     protected Date createdDate;
@@ -51,5 +48,4 @@ public class AbstractEntity extends AbstractPersistable<Long> {
     public void touchForUpdate() {
         this.setLastModifiedDate(new Date());
     }
-
 }

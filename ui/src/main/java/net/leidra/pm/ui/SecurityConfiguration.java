@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -60,4 +61,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public AuditorAware<String> createAuditorProvider() {
+        return new SecurityAuditor();
+    }
+
+    public static class SecurityAuditor implements AuditorAware<String> {
+        @Override
+        public String getCurrentAuditor() {
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            return auth.getName();
+            return "leidra";
+        }
+    }
 }

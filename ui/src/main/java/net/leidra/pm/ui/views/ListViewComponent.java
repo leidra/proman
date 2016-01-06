@@ -7,5 +7,6 @@ import com.vaadin.ui.Component;
  */
 public interface ListViewComponent<BEAN> extends Component {
     void refresh();
+
     BEAN getValue();
 }

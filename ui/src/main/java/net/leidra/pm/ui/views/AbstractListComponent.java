@@ -5,17 +5,18 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
-import net.leidra.pm.shared.dtos.AbstractDto;
+import net.leidra.pm.shared.pojos.Pojo;
 import net.leidra.pm.ui.views.products.AbstractViewComponent;
 
 /**
  * Created by afuentes on 28/12/15.
  */
-public abstract class AbstractListComponent<BEAN extends AbstractDto> extends AbstractViewComponent<BEAN> implements ListViewComponent<BEAN> {
+public abstract class AbstractListComponent<BEAN extends Pojo> extends AbstractViewComponent<BEAN> implements ListViewComponent<BEAN> {
     protected Grid grid = new Grid();
 
     public void refresh() {
         grid.setContainerDataSource(presenter.createDatasource());
+        configureGridColumns();
     }
 
     @Override
@@ -29,9 +30,20 @@ public abstract class AbstractListComponent<BEAN extends AbstractDto> extends Ab
     }
 
     protected Grid createGrid() {
+        grid.addStyleName("list-component");
+        grid.setSizeFull();
         grid.addSelectionListener(this::rowSelected);
         grid.setDetailsGenerator(this::getDetails);
+
+        configureGrid();
+
         return grid;
+    }
+
+    protected void configureGrid() {
+    }
+
+    protected void configureGridColumns() {
     }
 
     public Component getDetails(Grid.RowReference rowReference) {
@@ -53,5 +65,6 @@ public abstract class AbstractListComponent<BEAN extends AbstractDto> extends Ab
     }
 
     protected abstract void editAction(Grid.RowReference rowReference);
+
     protected abstract void removeAction(Grid.RowReference rowReference);
 }

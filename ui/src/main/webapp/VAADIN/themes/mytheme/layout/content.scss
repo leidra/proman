@@ -1,25 +1,27 @@
 @mixin content-container {
 	.content-container {
 		width: 90%;
-		height: 100%;
+		@include full-height();
 		.view-layout {
-			width: 100%;
-			height: 100%;
+			@extend .full-size;
 
 			.component-container {
-				width: 100%;
-				height: 100%;
+				@extend .full-size;
 				.component-menu-container {
-					width: 100%;
+					@include full-width();
 					display:block;
 				}
 				.component-content-container{
-					width: 100%;
-					height: 100%;
-				}
-				.list-layout {
-					width: 100%;
-					height: 100%;
+					@extend .full-size;
+					.component-view-container {
+						@extend .full-size;
+						.list-layout {
+							@extend .full-size;
+							.list-component {
+								@include full-width();
+							}
+						}
+					}
 				}
 			}
 		}
