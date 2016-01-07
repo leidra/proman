@@ -26,9 +26,9 @@ public abstract class AbstractPresenter<BEAN extends Pojo> implements Presenter<
     }
 
     public void remove(BEAN dto) {
-        getService().remove(dto);
-        getCurrentView().getEditor().setDatasource(dto);
-        getCurrentView().changeViewComponent(getCurrentView().getEditor());
+        getService().remove(dto.getId());
+
+        this.showList();
     }
 
     public void showList() {

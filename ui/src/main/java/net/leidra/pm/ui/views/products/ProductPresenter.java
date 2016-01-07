@@ -15,6 +15,7 @@ import net.leidra.pm.ui.views.AbstractView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.Assert;
 import org.springframework.web.util.TagUtils;
 
 import java.util.Set;
@@ -34,7 +35,8 @@ public class ProductPresenter extends AbstractPresenter<ProductPojo> {
             dto = (ProductPojo) fieldGroup.getItemDataSource().getBean();
             dto = getService().save(dto);
         } catch (FieldGroup.CommitException ex) {
-            Notification.show(ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+            StringBuilder error = new StringBuilder("No se pudo guardar. Errores: ");
+            Notification.show(error.toString(), Notification.Type.ERROR_MESSAGE);
         }
 
         return dto;

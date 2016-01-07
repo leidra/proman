@@ -21,7 +21,14 @@ public class ProductEditor extends AbstractEditorComponent<ProductPojo> {
     private TextField brand;
 
     @Override
-    protected CssLayout buildView() {
+    @Autowired
+    @Qualifier(ProductPresenter.PRESENTER_NAME)
+    public void setPresenter(AbstractPresenter presenter) {
+        super.setPresenter(presenter);
+    }
+
+    @Override
+    protected void configureFields() {
         fieldGroup = new BeanFieldGroup<>(ProductPojo.class);
 
         name = new TextField("Name");
@@ -30,19 +37,17 @@ public class ProductEditor extends AbstractEditorComponent<ProductPojo> {
         brand.setNullRepresentation("");
         name.setNullRepresentation("");
 
+        super.configureFields(name, brand);
+    }
+
+    @Override
+    protected CssLayout createComponentLayout() {
         CssLayout editorLayout = new CssLayout();
         editorLayout.addComponent(name);
         editorLayout.addComponent(brand);
         editorLayout.addComponent(new Button("Save", this::saveAction));
 
         return editorLayout;
-    }
-
-    @Override
-    @Autowired
-    @Qualifier(ProductPresenter.PRESENTER_NAME)
-    public void setPresenter(AbstractPresenter presenter) {
-        super.setPresenter(presenter);
     }
 
 }

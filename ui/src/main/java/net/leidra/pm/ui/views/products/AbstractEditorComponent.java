@@ -4,6 +4,8 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Field;
 import net.leidra.pm.shared.pojos.Pojo;
 import net.leidra.pm.ui.views.EditorViewComponent;
 
@@ -21,7 +23,6 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
 
         fieldGroup.setItemDataSource(bean);
         fieldGroup.bindMemberFields(this);
-        configureFields();
     }
 
     protected void saveAction(Button.ClickEvent e) {
@@ -32,24 +33,26 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
         }
     }
 
-    private void configureFields() {
-        filterEditorFields(FieldEvents.BlurNotifier.class).forEach(p -> {
-            try {
-                p.setAccessible(true);
+    protected abstract void configureFields();
+    protected abstract CssLayout createComponentLayout();
 
-                FieldEvents.BlurNotifier blurField = ((FieldEvents.BlurNotifier) p.get(this));
-                AbstractField formField = ((AbstractField) p.get(this));
-                formField.setValidationVisible(false);
-                blurField.addBlurListener(ev -> formField.setValidationVisible(!formField.isValid()));
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        });
+    protected void configureFields(Field... fields) {
+        Stream.of(fields).filter(f -> FieldEvents.BlurNotifier.class.isAssignableFrom(f.getClass()))
+                .forEach(p -> configureField(p));
     }
 
-    protected Stream<java.lang.reflect.Field> filterEditorFields(Class cls) {
-        return Stream.of(this.getClass().getDeclaredFields())
-                .filter(p -> cls.isAssignableFrom(p.getType()));
+    protected void configureField(Field p) {
+        FieldEvents.BlurNotifier blurField = (FieldEvents.BlurNotifier) p;
+        AbstractField formField = (AbstractField) p;
+        formField.setValidationVisible(false);
+        blurField.addBlurListener(ev -> formField.setValidationVisible(!formField.isValid()));
+    }
+
+    @Override
+    protected CssLayout buildView() {
+        configureFields();
+
+        return createComponentLayout();
     }
 
 }
