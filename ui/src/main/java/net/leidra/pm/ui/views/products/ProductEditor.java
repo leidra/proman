@@ -43,9 +43,10 @@ public class ProductEditor extends AbstractEditorComponent<ProductPojo> {
     @Override
     protected CssLayout createComponentLayout() {
         CssLayout editorLayout = new CssLayout();
-        editorLayout.addComponent(name);
-        editorLayout.addComponent(brand);
-        editorLayout.addComponent(new Button("Save", this::saveAction));
+        editorLayout.addStyleName("editor-component-container");
+        editorLayout.addComponent(createFieldContainer(name));
+        editorLayout.addComponent(createFieldContainer(brand));
+        editorLayout.addComponent(createFieldContainer(new Button("Save", this::saveAction)));
 
         return editorLayout;
     }

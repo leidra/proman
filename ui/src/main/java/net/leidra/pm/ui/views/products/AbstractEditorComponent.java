@@ -2,10 +2,7 @@ package net.leidra.pm.ui.views.products;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.FieldEvents;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Field;
+import com.vaadin.ui.*;
 import net.leidra.pm.shared.pojos.Pojo;
 import net.leidra.pm.ui.views.EditorViewComponent;
 
@@ -33,9 +30,6 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
         }
     }
 
-    protected abstract void configureFields();
-    protected abstract CssLayout createComponentLayout();
-
     protected void configureFields(Field... fields) {
         Stream.of(fields).filter(f -> FieldEvents.BlurNotifier.class.isAssignableFrom(f.getClass()))
                 .forEach(p -> configureField(p));
@@ -55,4 +49,14 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
         return createComponentLayout();
     }
 
+    protected CssLayout createFieldContainer(Component field) {
+        CssLayout fieldContainer = new CssLayout();
+        fieldContainer.addStyleName("editor-field-container");
+        fieldContainer.addComponent(field);
+
+        return fieldContainer;
+    }
+
+    protected abstract void configureFields();
+    protected abstract CssLayout createComponentLayout();
 }

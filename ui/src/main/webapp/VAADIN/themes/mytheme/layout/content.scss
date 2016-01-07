@@ -15,6 +15,15 @@
 					@extend .full-size;
 					.component-view-container {
 						@extend .full-size;
+						.editor-component-container {
+							@extend .full-size;
+							margin:1% 0;
+							.editor-field-container {
+								/*@extend .full-width;*/
+								width:100%;
+								margin-bottom:1%;
+							}
+						}
 						.list-layout {
 							@extend .full-size;
 							.list-component {
