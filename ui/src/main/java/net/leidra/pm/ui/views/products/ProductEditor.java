@@ -31,9 +31,6 @@ public class ProductEditor extends AbstractEditorComponent<ProductPojo> {
     protected void configureFields() {
         fieldGroup = new BeanFieldGroup<>(ProductPojo.class);
 
-        name = new TextField("Name");
-        brand = new TextField("Brand");
-
         brand.setNullRepresentation("");
         name.setNullRepresentation("");
 
@@ -41,14 +38,12 @@ public class ProductEditor extends AbstractEditorComponent<ProductPojo> {
     }
 
     @Override
-    protected CssLayout createComponentLayout() {
-        CssLayout editorLayout = new CssLayout();
-        editorLayout.addStyleName("editor-component-container");
+    protected void createFieldsComponents(CssLayout editorLayout) {
+        name = new TextField("Name");
+        brand = new TextField("Brand");
+
         editorLayout.addComponent(createFieldContainer(name));
         editorLayout.addComponent(createFieldContainer(brand));
-        editorLayout.addComponent(createFieldContainer(new Button("Save", this::saveAction)));
-
-        return editorLayout;
     }
 
 }

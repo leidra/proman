@@ -30,6 +30,11 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
         }
     }
 
+    protected void cancelAction(Button.ClickEvent e) {
+        fieldGroup.discard();
+        presenter.showList();
+    }
+
     protected void configureFields(Field... fields) {
         Stream.of(fields).filter(f -> FieldEvents.BlurNotifier.class.isAssignableFrom(f.getClass()))
                 .forEach(p -> configureField(p));
@@ -44,9 +49,14 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
 
     @Override
     protected CssLayout buildView() {
+        CssLayout editorLayout = new CssLayout();
+        editorLayout.addStyleName("editor-component-container");
+
+        createFieldsComponents(editorLayout);
+        createButtons(editorLayout);
         configureFields();
 
-        return createComponentLayout();
+        return editorLayout;
     }
 
     protected CssLayout createFieldContainer(Component field) {
@@ -57,6 +67,15 @@ public abstract class AbstractEditorComponent<BEAN extends Pojo> extends Abstrac
         return fieldContainer;
     }
 
+    protected void createButtons(CssLayout editorLayout) {
+        CssLayout buttonsContainer = new CssLayout();
+        buttonsContainer.addStyleName("buttons-container");
+        buttonsContainer.addComponent(createFieldContainer(new Button("Save", this::saveAction)));
+        buttonsContainer.addComponent(createFieldContainer(new Button("Cancel", this::cancelAction)));
+
+        editorLayout.addComponent(buttonsContainer);
+    }
+
     protected abstract void configureFields();
-    protected abstract CssLayout createComponentLayout();
+    protected abstract void createFieldsComponents(CssLayout editorLayout);
 }
