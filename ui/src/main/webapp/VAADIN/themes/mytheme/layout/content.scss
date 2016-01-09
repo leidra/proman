@@ -1,33 +1,48 @@
-@mixin content-container {
+@mixin view-content {
 	.content-container {
 		width: 90%;
 		@include full-height();
-		.view-layout {
+		.view {
 			@extend .full-size;
-
+			.view-container_root {
+				@extend .full-size;
+			}
+			.view-menu {
+				width:100%;
+				display:block;
+				.v-button {
+					margin-right: 1%;
+				}
+			}
 			.component-container {
 				@extend .full-size;
-				.component-menu-container {
-					@include full-width();
-					display:block;
-				}
-				.component-content-container{
+				.view-component {
 					@extend .full-size;
-					.component-view-container {
+					.editor {
 						@extend .full-size;
-						.editor-component-container {
-							@extend .full-size;
-							margin:1% 0;
-							.editor-field-container {
-								width:100%;
-								margin-bottom:1%;
+						margin-top: 1%;
+						margin-bottom: 1%;
+						.editor_field {
+							width:100%;
+							margin-bottom:1%;
+							.v-caption {
+								margin-right: 1%;
 							}
 						}
-						.list-layout {
-							@extend .full-size;
-							.list-component {
-								@include full-width();
+						.editor_buttons {
+							width:100%;
+							margin-bottom:1%;
+							.editor_button {
+								&.editor_button-save {
+									margin-right: 1%;
+								}
 							}
+						}
+					}
+					.list {
+						@extend .full-size;
+						.list__datagrid {
+							@include full-width();
 						}
 					}
 				}

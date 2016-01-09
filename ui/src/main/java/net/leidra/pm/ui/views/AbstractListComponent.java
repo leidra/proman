@@ -6,12 +6,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
 import net.leidra.pm.shared.pojos.Pojo;
-import net.leidra.pm.ui.views.products.AbstractViewComponent;
+import net.leidra.pm.ui.views.products.AbstractComponent;
 
 /**
  * Created by afuentes on 28/12/15.
  */
-public abstract class AbstractListComponent<BEAN extends Pojo> extends AbstractViewComponent<BEAN> implements ListViewComponent<BEAN> {
+public abstract class AbstractListComponent<BEAN extends Pojo> extends AbstractComponent<BEAN> implements ListViewComponent<BEAN> {
     protected Grid grid = new Grid();
 
     public void refresh() {
@@ -22,7 +22,7 @@ public abstract class AbstractListComponent<BEAN extends Pojo> extends AbstractV
     @Override
     protected CssLayout buildView() {
         CssLayout listLayout = new CssLayout();
-        listLayout.addStyleName("list-layout");
+        listLayout.addStyleName("list");
         listLayout.addComponent(createGrid());
         refresh();
 
@@ -30,7 +30,7 @@ public abstract class AbstractListComponent<BEAN extends Pojo> extends AbstractV
     }
 
     protected Grid createGrid() {
-        grid.addStyleName("list-component");
+        grid.addStyleName("list_datagrid");
         grid.setSizeFull();
         grid.addSelectionListener(this::rowSelected);
         grid.setDetailsGenerator(this::getDetails);

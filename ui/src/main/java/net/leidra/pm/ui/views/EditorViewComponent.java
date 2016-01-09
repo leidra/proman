@@ -7,4 +7,5 @@ import com.vaadin.ui.Component;
  */
 public interface EditorViewComponent<BEAN> extends Component {
     void setDatasource(BEAN bean);
+    void setValidationVisible(boolean isVisiable);
 }

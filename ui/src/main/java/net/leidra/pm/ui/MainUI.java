@@ -1,5 +1,6 @@
 package net.leidra.pm.ui;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.DefaultErrorHandler;
@@ -8,23 +9,32 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
+import net.leidra.pm.ui.components.Menu;
 import net.leidra.pm.ui.views.AccessDeniedView;
 import net.leidra.pm.ui.views.ErrorView;
 import net.leidra.pm.ui.views.products.ProductView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.vaadin.spring.security.util.SecurityExceptionUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by afuentes on 14/12/15.
  */
 @SpringUI
 @Theme(MainUI.THEME_NAME)
+@PreserveOnRefresh
 public class MainUI extends UI {
     public final static String THEME_NAME = "mytheme";
     private CssLayout contentContainer;
 
     @Autowired
     private SpringViewProvider viewProvider;
+
+    @Autowired
+    private Menu menu;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -47,8 +57,8 @@ public class MainUI extends UI {
 
     private Component createViewContainer() {
         CssLayout viewContainer = new CssLayout();
-        viewContainer.addStyleName("view-container");
-        viewContainer.addComponent(this.createMenu());
+        viewContainer.addStyleName("ui-view");
+        viewContainer.addComponent(this.createSideBar());
         viewContainer.addComponent(this.createContent());
 
         return viewContainer;
@@ -56,18 +66,21 @@ public class MainUI extends UI {
 
     private Component createHeader() {
         CssLayout headerContainer = new CssLayout();
-        headerContainer.addStyleName("header-container");
+        headerContainer.addStyleName("ui-header");
+        headerContainer.addComponent(new Label("ProMan"));
         return headerContainer;
     }
 
-    private Component createMenu() {
-        CssLayout menuContainer = new CssLayout();
-        menuContainer.addStyleName("menu-container");
-        menuContainer.addComponent(new Button("Products",
-                e -> getUI().getNavigator().navigateTo(ProductView.VIEW_NAME)));
-        menuContainer.addComponent(new Button("Logout",
-                e -> getPage().setLocation("/logout")));
-        return menuContainer;
+    private Component createSideBar() {
+        if(menu.getDatasource().isEmpty()) {
+            Map<String, Runnable> datasource = new HashMap<>();
+            datasource.put("Products", () -> getUI().getNavigator().navigateTo(ProductView.VIEW_NAME));
+            datasource.put("Logout", () -> getPage().setLocation("/logout"));
+
+            menu.setDatasource(datasource);
+        }
+
+        return menu;
     }
 
     private Component createContent() {

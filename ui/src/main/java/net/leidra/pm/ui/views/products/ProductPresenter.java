@@ -31,6 +31,7 @@ public class ProductPresenter extends AbstractPresenter<ProductPojo> {
     public ProductPojo save(BeanFieldGroup fieldGroup) {
         ProductPojo dto = (ProductPojo) fieldGroup.getItemDataSource().getBean();
         try {
+            getCurrentView().getEditor().setValidationVisible(!fieldGroup.isValid());
             fieldGroup.commit();
             dto = (ProductPojo) fieldGroup.getItemDataSource().getBean();
             dto = getService().save(dto);

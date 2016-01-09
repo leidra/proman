@@ -9,13 +9,13 @@ import javax.annotation.PostConstruct;
 /**
  * Created by afuentes on 27/12/15.
  */
-public abstract class AbstractViewComponent<BEAN extends Pojo> extends CustomComponent {
+public abstract class AbstractComponent<BEAN extends Pojo> extends CustomComponent {
     protected BEAN bean;
     protected AbstractPresenter<BEAN> presenter;
 
     @PostConstruct
     public void postConstruct() {
-        this.addStyleName("component-view-container");
+        this.addStyleName("view-component");
         this.setCompositionRoot(buildView());
     }
 

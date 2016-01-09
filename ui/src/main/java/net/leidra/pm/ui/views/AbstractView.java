@@ -25,13 +25,13 @@ public abstract class AbstractView<BEAN> extends CustomComponent implements View
 
     @PostConstruct
     public void postConstruct() {
-        this.addStyleName("view-layout");
+        this.addStyleName("view");
 
         CssLayout rootLayout = new CssLayout();
-        rootLayout.addStyleName("component-container");
-        rootLayout.addComponent(createComponentMenu());
+        rootLayout.addStyleName("view-container_root");
+        rootLayout.addComponent(createViewMenu());
 
-        componentContainer.addStyleName("component-content-container");
+        componentContainer.addStyleName("component-container");
         rootLayout.addComponent(componentContainer);
 
         setCompositionRoot(rootLayout);
@@ -47,9 +47,9 @@ public abstract class AbstractView<BEAN> extends CustomComponent implements View
         componentContainer.addComponent(component);
     }
 
-    protected Component createComponentMenu() {
+    protected Component createViewMenu() {
         CssLayout componentMenuContainer = new CssLayout();
-        componentMenuContainer.addStyleName("component-menu-container");
+        componentMenuContainer.addStyleName("view-menu");
 
         componentMenuContainer.addComponent(newButton);
         componentMenuContainer.addComponent(listButton);
